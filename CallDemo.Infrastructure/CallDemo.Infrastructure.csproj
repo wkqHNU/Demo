@@ -41,9 +41,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FeedBack.cs" />
-    <Compile Include="Operation.cs" />
+    <Compile Include="Emulator\EmulatorPassive.cs" />
+    <Compile Include="EnumList.cs" />
+    <Compile Include="Pathloss.cs" />
+    <Compile Include="Space\Phi.cs" />
+    <Compile Include="Space\PhiDaMoDa.cs" />
+    <Compile Include="Space\TestSpace.cs" />
+    <Compile Include="Space\Theta.cs" />
+    <Compile Include="Space\Theta1800.cs" />
+    <Compile Include="Template\PassiveParameter.cs" />
+    <Compile Include="TestPoint.cs" />
+    <Compile Include="ProjectOTA.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestResult.cs" />
+    <Compile Include="Tool\CsvFileHelper.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
