@@ -21,6 +21,7 @@ namespace CallDemo.Infrastructure.Tool
             DataTable dt = new DataTable();
             FileStream fs = null;
             StreamReader sr = null;
+            int rowCount = 0;
             try
             {
                 fs = new FileStream(fileName, System.IO.FileMode.Open, System.IO.FileAccess.Read);
@@ -37,6 +38,7 @@ namespace CallDemo.Infrastructure.Tool
                 //逐行读取CSV中的数据
                 while ((strLine = sr.ReadLine()) != null)
                 {
+                    rowCount++;
                     aryLine = strLine.Split(',');
                     if (IsFirst == true)
                     {

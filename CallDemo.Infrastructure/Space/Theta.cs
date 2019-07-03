@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CallDemo.Infrastructure.Space
 {
-    class Theta
+    public class Theta
     {
         public int theta=0;
         public virtual int ThetaConvert(int thetaPhysical, int phiPhysical)

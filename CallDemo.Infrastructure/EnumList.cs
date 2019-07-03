@@ -17,14 +17,11 @@ namespace CallDemo.Infrastructure
             NULL,
             LTE_MIMO_4x4,
         }
-
-        public static class Instrument
+        public enum Instrument
         {
-            public enum Type
-            {
-                Agilent_UXM,
-                Agilent_5071C,
-            }
+            Emulator,
+            Agilent_UXM,
+            Agilent_5071C,
         }
         public enum Polar
         {
@@ -32,7 +29,7 @@ namespace CallDemo.Infrastructure
             Phi = 1,  
             Both = 2,  
         }
-        public enum TestMode
+        public enum SystemTestMode
         {
             TRP = 0,
             TIS = 1,

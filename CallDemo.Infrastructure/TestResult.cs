@@ -10,23 +10,30 @@ namespace CallDemo.Infrastructure
 {
     public class TestResult
     {
-        public double dataRawTemp_dB; // 无源：gain，有源上行：eirp，有源下行：eis
-        public double dataTemp_dB;
-        public DataTable dtDataRaw_dB = new DataTable();
-        public DataTable dtData_dB = new DataTable();
-        const int length = 3; // 0:单极化theta 1:单极化phi 2:总极化total
-        double[] aveTotal = new double[length];     // 无源：效率，有源上行：TRP,有源下行：TIS
-        double[] aveTotal_dB = new double[length];  // 以对数表示
-        double[] aveNHP30 = new double[length]; // NHP: Near Horizon Parital
-        double[] aveNHP30_dB = new double[length];
-        double[] aveNHP45 = new double[length]; // NHP: Near Horizon Parital
-        double[] aveNHP45_dB = new double[length];
-        double[] dataMax_dB = new double[length];
-        double[] dataMaxTheta = new double[length];
-        double[] dataMaxPhi = new double[length];
-        double[] dataMin_dB = new double[length];
-        double[] dataMinTheta = new double[length];
-        double[] dataMinPhi = new double[length];
+        /// <summary>
+        /// 校准后的数据data在无源测试下是指gain，在有源上行测试下是指eirp，在有源下行测试下是指eis
+        /// 无源：gain，有源上行：eirp，有源下行：eis
+        /// 平均值在无源测试下是指效率，在有源上行测试下是指trp，在有源下行测试下是指tis
+        /// </summary>
+        public double dataRawTemp_dB;               // 当前角度，当前极化校准前的数据
+        public double dataTemp_dB;                  // 当前角度，当前极化校准后的数据
+        public DataTable dtDataRaw_dB = new DataTable();        // 乱序，所有角度，所有极化校准前的数据
+        public DataTable dtData_dB = new DataTable();           // 乱序，所有角度，所有极化校准后的数据
+        public DataTable dtDataRawOrder_dB = new DataTable();   // 顺序，所有角度，所有极化校准前的数据
+        public DataTable dtDataOrder_dB = new DataTable();      // 顺序，所有角度，所有极化校准后的数据
+        private const int length = 3;                       // 0:单极化theta 1:单极化phi 2:总极化total
+        public double[] aveTotal = new double[length];     // 无源：效率，有源上行：TRP,有源下行：TIS
+        public double[] aveTotal_dB = new double[length];  // 以对数表示
+        public double[] aveNHP30 = new double[length];     // NHP: Near Horizon Parital
+        public double[] aveNHP30_dB = new double[length];  // 以对数表示
+        public double[] aveNHP45 = new double[length];     // NHP: Near Horizon Parital
+        public double[] aveNHP45_dB = new double[length];  // 以对数表示
+        public double[] dataMax_dB = new double[length];   // 校准后数据的最大值
+        public double[] dataMaxTheta = new double[length]; // 校准后数据的最大值对应的theta角度
+        public double[] dataMaxPhi = new double[length];   // 校准后数据的最大值对应的phi角度
+        public double[] dataMin_dB = new double[length];   // 校准后数据的最小值
+        public double[] dataMinTheta = new double[length]; // 校准后数据的最小值对应的theta角度
+        public double[] dataMinPhi = new double[length];   // 校准后数据的最小值对应的phi角度
         public TestResult()
         {
             DataColumn dc1;
@@ -50,6 +57,15 @@ namespace CallDemo.Infrastructure
                 dtData_dB.Columns.Add(dc2);
             }
         }
+        /// <summary>
+        /// 每个角度，每个极化保持一次数据
+        /// </summary>
+        /// <param name="dt"></param>
+        /// <param name="freq"></param>
+        /// <param name="theta"></param>
+        /// <param name="phi"></param>
+        /// <param name="polar"></param>
+        /// <param name="data"></param>
         public void AddRow(DataTable dt, double freq, int theta, int phi, Polar polar, double data)
         {
             DataRow dr = dt.NewRow();
@@ -60,13 +76,27 @@ namespace CallDemo.Infrastructure
             dr[4] = data;
             dt.Rows.Add(dr);
         }
+        /// <summary>
+        /// 在球坐标下求平均值
+        /// </summary>
+        /// <param name="thetaStart"></param>
+        /// <param name="thetaStep"></param>
+        /// <param name="thetaEnd"></param>
+        /// <param name="phiStart"></param>
+        /// <param name="phiStep"></param>
+        /// <param name="phiEnd"></param>
+        /// <param name="thetaCount"></param>
+        /// <param name="phiCount"></param>
+        /// <param name="dt_dB"></param>
+        /// <param name="isTrpOrTis"></param>
+        /// <returns></returns>
         public double[] AverageInSphericalCoordinateSystem(
             int thetaStart, int thetaStep, int thetaEnd,
             int phiStart, int phiStep, int phiEnd, 
             int thetaCount, int phiCount, DataTable dt_dB, bool isTrpOrTis)
         {
-            double[] ave = new double[length];
             //DateTime dt1 = DateTime.Now;
+            double[] ave = new double[length];
             bool TRPOrGain = true;
             //bool TIS = false;
             DataColumn[] cols;
@@ -137,6 +167,17 @@ namespace CallDemo.Infrastructure
             //double msecInterval1 = dt2.Subtract(dt1).TotalMilliseconds;
             return ave;
         }
+        /// <summary>
+        /// 平均值在无源测试下是指效率，在有源上行测试下是指trp，在有源下行测试下是指tis
+        /// </summary>
+        /// <param name="thetaStart"></param>
+        /// <param name="thetaStep"></param>
+        /// <param name="thetaEnd"></param>
+        /// <param name="phiStart"></param>
+        /// <param name="phiStep"></param>
+        /// <param name="phiEnd"></param>
+        /// <param name="dt_dB"></param>
+        /// <param name="isTrpOrTis"></param>
         public void CalGainOrTrpOrTis(
             int thetaStart, int thetaStep, int thetaEnd,
             int phiStart, int phiStep, int phiEnd,

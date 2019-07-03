@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace CallDemo.Infrastructure.Space
 {
-    class Phi
+    public class Phi
     {
         public int phi=0;
-        public virtual int PhiConvert(int thetaPhysical, int phiPhysical)
+        public virtual int PhiConvert(int thetaPhysical, int phiPhysical, bool phiStopFlag)
         {
             return phiPhysical;
         }
